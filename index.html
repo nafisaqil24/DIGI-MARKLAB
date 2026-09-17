@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brief Pembuatan Website - DIGI MARKLAB</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1F5FB8',
+                        primaryDark: '#154488',
+                        primaryLight: '#1E293B'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="icon.png" type="image/png">
+    <!-- jsPDF & docx CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-ollbar-thumb { background: #c5d3e8; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1F5FB8; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-primary selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-extrabold text-xl shadow-md">
+                    D
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white tracking-tight">DIGI MARKLAB</h1>
+                    <p class="text-xs text-slate-400">Form Brief Pembuatan Website Professional</p>
+                </div>
+            </div>
+            <div class="hidden sm:flex items-center space-x-2 text-xs bg-primaryLight text-primary font-medium px-3 py-1.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>WhatsApp Admin Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Hero Banner -->
+        <div class="bg-gradient-to-br from-primary to-primaryDark text-white rounded-2xl p-6 sm:p-8 mb-8 shadow-lg relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-slate-800/10 rounded-full blur-2xl pointer-events-none"></div>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">Mulai Project Website Impian Anda 🚀</h2>
+            <p class="text-slate-100 text-sm sm:text-base max-w-2xl leading-relaxed">
+                Silakan lengkapi brief di bawah ini secara detail. Data ini akan membantu tim DIGI MARKLAB memahami kebutuhan bisnis Anda dengan tepat sebelum pengerjaan dimulai.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
+                <span class="bg-slate-800/20 px-3 py-1 rounded-lg backdrop-blur-xs">⚡ Cepat & Praktis</span>
+                <span class="bg-slate-800/20 px-3 py-1 rounded-lg backdrop-blur-xs">🔒 Data Aman di Perangkat Anda</span>
+                <span class="bg-slate-800/20 px-3 py-1 rounded-lg backdrop-blur-xs">📄 Auto-Generate PDF/Word</span>
+            </div>
+        </div>
+
+        <!-- Alert Error Box -->
+        <div id="errorAlert" class="hidden mb-6 bg-red-950/60 border-l-4 border-red-500 text-red-300 p-4 rounded-xl shadow-xs" role="alert">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.428 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                <span class="font-bold">Mohon Lengkapi Data Wajib:</span>
+            </div>
+            <p id="errorMessage" class="mt-1 text-sm pl-7"></p>
+        </div>
+
+        <!-- Form Brief -->
+        <form id="briefForm" class="space-y-6" novalidate>
+
+            <!-- SECTION 1: Data Klien -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">1</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Data </h3>
+                        <p class="text-xs text-slate-400">Informasi kontak pemegang project</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input type="text" id="nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: Budi Santoso">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Nama Bisnis / Usaha <span class="text-red-500">*</span></label>
+                        <input type="text" id="namaBisnis" required class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: Kopi Senja Nusantara">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">No WhatsApp Aktif <span class="text-red-500">*</span></label>
+                        <input type="tel" id="noWhatsapp" required class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: 081234567890">
+                        <span class="text-xs text-slate-400 mt-1 block">Nomor yang terhubung dengan WhatsApp untuk koordinasi.</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Email</label>
+                        <input type="email" id="email" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: budi@email.com">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Informasi Website -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">2</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Informasi Website</h3>
+                        <p class="text-xs text-slate-400">Jenis dan tujuan pembuatan website</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Jenis Website <span class="text-red-500">*</span></label>
+                        <select id="jenisWebsite" required class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-slate-800 transition-all">
+                            <option value="">-- Pilih Jenis Website --</option>
+                            <option value="Landing Page">Landing Page (Halaman tunggal fokus konversi/promo)</option>
+                            <option value="Company Profile">Company Profile (Profil perusahaan multi-halaman)</option>
+                            <option value="Toko Online Sederhana">Toko Online Sederhana (Katalog produk & order WA)</option>
+                            <option value="Custom">Custom / Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-2">Tujuan Utama Website (Bisa pilih lebih dari satu)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                                <input type="checkbox" name="tujuanWebsite" value="Branding" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                                <span class="text-sm font-medium text-slate-300">Branding Perusahaan / Personal</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                                <input type="checkbox" name="tujuanWebsite" value="Dapat pelanggan" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                                <span class="text-sm font-medium text-slate-300">Mendapatkan Pelanggan / Leads</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                                <input type="checkbox" name="tujuanWebsite" value="Jual produk" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                                <span class="text-sm font-medium text-slate-300">Menjual Produk / Jasa Langsung</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                                <input type="checkbox" name="tujuanWebsite" value="Info bisnis" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                                <span class="text-sm font-medium text-slate-300">Pusat Informasi Bisnis / Portofolio</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Target Selesai</label>
+                            <input type="date" id="targetSelesai" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Kisaran Budget</label>
+                            <input type="text" id="budget" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: Rp 1.5jt - Rp 3jt">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Domain (.com / .id dll)</label>
+                            <select id="domainStatus" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-slate-800 transition-all">
+                                <option value="Belum ada">Belum ada (Minta dibantu)</option>
+                                <option value="Sudah ada">Sudah punya domain sendiri</option>
+                                <option value="Belum urus sendiri">Belum, mau urus sendiri</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Hosting</label>
+                            <select id="hostingStatus" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-slate-800 transition-all">
+                                <option value="Belum ada">Belum ada (Minta dibantu)</option>
+                                <option value="Sudah ada">Sudah punya hosting sendiri</option>
+                                <option value="Belum urus sendiri">Belum, mau urus sendiri</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Halaman Dibutuhkan -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">3</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Halaman yang Dibutuhkan</h3>
+                        <p class="text-xs text-slate-400">Pilih struktur halaman yang ingin ditampilkan di website</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Home" checked class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Home</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Tentang Kami" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Tentang Kami</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Layanan" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Layanan</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Produk" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Produk</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Portfolio" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Portfolio</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Galeri" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Galeri</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Testimoni" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Testimoni</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="halaman" value="Kontak" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Kontak</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Halaman Lainnya (Jika ada)</label>
+                        <input type="text" id="halamanLainnya" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: FAQ, Syarat & Ketentuan, Karir">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Fitur Diinginkan -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">4</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Fitur yang Diinginkan</h3>
+                        <p class="text-xs text-slate-400">Fitur interaktif yang ingin disematkan pada website</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="WhatsApp Button" checked class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Tombol Chat WhatsApp Mengambang</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Contact Form" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Formulir Kontak / Pesan</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Google Maps" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Integrasi Google Maps Lokasi</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Login/Register" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Sistem Login / Register Member</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Admin Panel" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Admin Panel / Dashboard Pengelolaan</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Keranjang & Checkout" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Keranjang Belanja & Checkout WhatsApp</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all">
+                            <input type="checkbox" name="fitur" value="Payment Gateway" class="w-4 h-4 text-primary rounded border-slate-700 focus:ring-primary">
+                            <span class="text-sm font-medium text-slate-300">Payment Gateway (Midtrans/Xendit dll)</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Fitur Lainnya</label>
+                        <input type="text" id="fiturLainnya" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: Multi-bahasa, Kalkulator Harga Otomatis">
+                    </div>
+
+                    <div class="bg-amber-950/60 border border-amber-800 rounded-xl p-4 text-xs text-amber-300 flex items-start space-x-2">
+                        <svg class="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                        <span>Catatan: Fitur tingkat lanjut seperti Payment Gateway otomatis atau Admin Panel kompleks mungkin dikenakan penyesuaian biaya tambahan yang akan dikonfirmasi admin.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: Materi Website (Logo, Foto, Teks, dll) -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">5</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Materi & Konten Website</h3>
+                        <p class="text-xs text-slate-400">Unggah logo, foto produk, serta teks konten pendukung</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Upload Logo -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Upload Logo Perusahaan/Brand (Bisa pilih banyak)</label>
+                        <div class="border-2 border-dashed border-slate-700 rounded-2xl p-6 text-center hover:border-primary transition-all bg-slate-50/50">
+                            <input type="file" id="uploadLogo" accept="image/*" multiple class="hidden" onchange="handleFiles('logo', this.files)">
+                            <label for="uploadLogo" class="cursor-pointer flex flex-col items-center">
+                                <svg class="w-10 h-10 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span class="text-sm font-semibold text-primary hover:underline">Klik untuk pilih file logo</span>
+                                <span class="text-xs text-slate-400 mt-1">PNG, JPG, SVG atau WEBP (Kualitas asli disimpan)</span>
+                            </label>
+                        </div>
+                        <div id="previewLogo" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3"></div>
+                    </div>
+
+                    <!-- Upload Foto -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Upload Foto Produk / Galeri / Portofolio (Bisa pilih banyak)</label>
+                        <div class="border-2 border-dashed border-slate-700 rounded-2xl p-6 text-center hover:border-primary transition-all bg-slate-50/50">
+                            <input type="file" id="uploadFoto" accept="image/*" multiple class="hidden" onchange="handleFiles('foto', this.files)">
+                            <label for="uploadFoto" class="cursor-pointer flex flex-col items-center">
+                                <svg class="w-10 h-10 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span class="text-sm font-semibold text-primary hover:underline">Klik untuk pilih foto-foto</span>
+                                <span class="text-xs text-slate-400 mt-1">Kualitas asli dipertahankan, tidak dikompres</span>
+                            </label>
+                        </div>
+                        <div id="previewFoto" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3"></div>
+                    </div>
+
+                    <!-- Video URL -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Link Video Profil / Produk (Google Drive atau YouTube)</label>
+                        <input type="url" id="videoUrl" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: https://youtube.com/watch?v=xxxx atau link Google Drive">
+                    </div>
+
+                    <!-- Teks Konten -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Tentang Perusahaan / Bisnis</label>
+                            <textarea id="tentangPerusahaan" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all custom-scrollbar" placeholder="Ceritakan sejarah singkat, visi, atau keunggulan bisnis Anda..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1.5">Deskripsi Layanan / Produk Utama</label>
+                            <textarea id="deskripsiLayanan" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all custom-scrollbar" placeholder="Jelaskan produk atau jasa yang ditawarkan di website..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-300 mb-1.5">Alamat Lengkap Usaha</label>
+                                <input type="text" id="alamat" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: Jl. Sudirman No. 123, Jakarta">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-300 mb-1.5">Social Media (Instagram / TikTok / FB)</label>
+                                <input type="text" id="sosmed" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all" placeholder="Contoh: @kopisenja.id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: Referensi Desain -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">6</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Referensi Desain (Opsional)</h3>
+                        <p class="text-xs text-slate-400">Website contoh yang Anda sukai tampilannya</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Link Referensi 1</label>
+                            <input type="url" id="ref1" class="w-full px-3 py-2 rounded-xl border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Link Referensi 2</label>
+                            <input type="url" id="ref2" class="w-full px-3 py-2 rounded-xl border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Link Referensi 3</label>
+                            <input type="url" id="ref3" class="w-full px-3 py-2 rounded-xl border border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1.5">Bagian apa yang paling Anda sukai dari referensi tersebut?</label>
+                        <textarea id="refCatatan" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all custom-scrollbar" placeholder="Contoh: Suka warnanya yang elegan, tata letak produknya bersih, dll..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 7: Catatan Tambahan -->
+            <div class="bg-slate-800 rounded-2xl shadow-sm border border-slate-700 p-6 sm:p-8 transition-all hover:shadow-md">
+                <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-700">
+                    <div class="w-8 h-8 rounded-lg bg-primaryLight text-primary font-bold flex items-center justify-center text-sm">7</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Catatan Tambahan</h3>
+                        <p class="text-xs text-slate-400">Hal lain yang ingin disampaikan kepada tim pengembang</p>
+                    </div>
+                </div>
+
+                <div>
+                    <textarea id="catatanTambahan" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm transition-all custom-scrollbar" placeholder="Tuliskan catatan khusus atau permintaan khusus lainnya di sini..."></textarea>
+                </div>
+            </div>
+
+            <!-- FORMAT & SUBMIT SECTION -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 sm:p-8 shadow-xl">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div class="w-full sm:w-auto">
+                        <h3 class="text-lg font-bold mb-1">Pilih Format Dokumen Brief</h3>
+                        <p class="text-slate-400 text-xs">Dokumen dan file JSON mentah akan otomatis terdownload / terkirim.</p>
+                        <div class="flex items-center space-x-6 mt-3">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" name="formatFile" value="pdf" checked class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="text-sm font-medium">Format PDF</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" name="formatFile" value="word" class="w-4 h-4 text-primary focus:ring-primary">
+                                <span class="text-sm font-medium">Format Word (.docx)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="generateAndSubmit()" class="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primaryDark text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Selesai & Kirim ke WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 border-t border-slate-700 mt-12 py-6 text-center text-xs text-slate-400">
+        <p>&copy; 2026 DIGI MARKLAB. All rights reserved. Powered by Static HTML & Web Standards.</p>
+    </footer>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center">
+        <div class="bg-slate-800 rounded-2xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl space-y-4">
+            <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <h4 class="font-bold text-lg text-white" id="loadingTitle">Memproses Dokumen...</h4>
+            <p class="text-xs text-slate-400" id="loadingDesc">Mohon tunggu sebentar, sedang menyiapkan file PDF/Word beserta gambar kualitas asli Anda.</p>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // Store uploaded files as base64 in memory
+        const uploadedData = {
+            logo: [], // array of { name, type, dataBase64 }
+            foto: []  // array of { name, type, dataBase64 }
+        };
+
+        const ADMIN_WHATSAPP = "6285136592922";
+
+        // Handle file uploads
+        function handleFiles(category, files) {
+            const previewContainer = document.getElementById(category === 'logo' ? 'previewLogo' : 'previewFoto');
+            
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileObj = {
+                        name: file.name,
+                        type: file.type,
+                        dataBase64: e.target.result
+                    };
+                    uploadedData[category].push(fileObj);
+                    renderPreviews(category);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderPreviews(category) {
+            const container = document.getElementById(category === 'logo' ? 'previewLogo' : 'previewFoto');
+            container.innerHTML = '';
+            
+            uploadedData[category].forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'relative group bg-slate-900 rounded-xl border border-slate-700 p-2 flex flex-col items-center justify-center h-28 overflow-hidden';
+                div.innerHTML = `
+                    <img src="${item.dataBase64}" class="w-full h-20 object-contain rounded-lg" alt="Preview">
+                    <span class="text-[10px] text-slate-400 truncate w-full text-center mt-1">${item.name}</span>
+                    <button type="button" onclick="removeFile('${category}', ${index})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function removeFile(category, index) {
+            uploadedData[category].splice(index, 1);
+            renderPreviews(category);
+        }
+
+        function getFormData() {
+            const getCheckedValues = (name) => {
+                const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+                return Array.from(checkboxes).map(cb => cb.value);
+            };
+
+            return {
+                client: {
+                    nama: document.getElementById('nama').value.trim(),
+                    namaBisnis: document.getElementById('namaBisnis').value.trim(),
+                    noWhatsapp: document.getElementById('noWhatsapp').value.trim(),
+                    email: document.getElementById('email').value.trim()
+                },
+                website: {
+                    jenisWebsite: document.getElementById('jenisWebsite').value,
+                    tujuanWebsite: getCheckedValues('tujuanWebsite'),
+                    targetSelesai: document.getElementById('targetSelesai').value,
+                    budget: document.getElementById('budget').value.trim(),
+                    domainStatus: document.getElementById('domainStatus').value,
+                    hostingStatus: document.getElementById('hostingStatus').value
+                },
+                halaman: {
+                    pilihan: getCheckedValues('halaman'),
+                    lainnya: document.getElementById('halamanLainnya').value.trim()
+                },
+                fitur: {
+                    pilihan: getCheckedValues('fitur'),
+                    lainnya: document.getElementById('fiturLainnya').value.trim()
+                },
+                materi: {
+                    logoNames: uploadedData.logo.map(l => l.name),
+                    fotoNames: uploadedData.foto.map(f => f.name),
+                    videoUrl: document.getElementById('videoUrl').value.trim(),
+                    tentangPerusahaan: document.getElementById('tentangPerusahaan').value.trim(),
+                    deskripsiLayanan: document.getElementById('deskripsiLayanan').value.trim(),
+                    testimoni: document.getElementById('testimoni').value.trim(),
+                    alamat: document.getElementById('alamat').value.trim(),
+                    sosmed: document.getElementById('sosmed').value.trim()
+                },
+                referensi: {
+                    ref1: document.getElementById('ref1').value.trim(),
+                    ref2: document.getElementById('ref2').value.trim(),
+                    ref3: document.getElementById('ref3').value.trim(),
+                    catatan: document.getElementById('refCatatan').value.trim()
+                },
+                catatanTambahan: document.getElementById('catatanTambahan').value.trim()
+            };
+        }
+
+        function validateForm(data) {
+            const missing = [];
+            if (!data.client.nama) missing.push("Nama Lengkap");
+            if (!data.client.namaBisnis) missing.push("Nama Bisnis/Usaha");
+            if (!data.client.noWhatsapp) missing.push("No WhatsApp Aktif");
+            if (!data.website.jenisWebsite) missing.push("Jenis Website");
+            return missing;
+        }
+
+        function showLoading(title, desc) {
+            document.getElementById('loadingTitle').innerText = title;
+            document.getElementById('loadingDesc').innerText = desc;
+            document.getElementById('loadingModal').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingModal').classList.add('hidden');
+        }
+
+        async function generateAndSubmit() {
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            errorAlert.classList.add('hidden');
+
+            const data = getFormData();
+            const missing = validateForm(data);
+
+            if (missing.length > 0) {
+                errorMessage.innerHTML = `Field berikut wajib diisi: <strong class="font-bold">${missing.join(', ')}</strong>`;
+                errorAlert.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            const format = document.querySelector('input[name="formatFile"]:checked').value;
+            showLoading("Membuat Dokumen Brief...", "Menyusun data dan mempertahankan kualitas asli gambar...");
+
+            try {
+                let generatedFile = null;
+                let fileName = `Brief_Website_${data.client.namaBisnis.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+                if (format === 'pdf') {
+                    generatedFile = await generatePDF(data, fileName + '.pdf');
+                } else {
+                    generatedFile = await generateWord(data, fileName + '.docx');
+                }
+
+
+
+                hideLoading();
+
+                // Handle sharing / WhatsApp redirection
+                handleDelivery(generatedFile, data);
+
+            } catch (err) {
+                console.error(err);
+                hideLoading();
+                alert("Terjadi kesalahan saat membuat dokumen: " + err.message);
+            }
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Helper to convert base64 image data to Image object with original aspect ratio
+        async function getImageDimensions(dataUrl) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight, img });
+                img.src = dataUrl;
+            });
+        }
+
+        // Generate PDF using jsPDF
+        async function generatePDF(data, filename) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+            
+            let y = 15;
+            const margin = 15;
+            const pageWidth = 210 - (2 * margin);
+
+            // Header Banner
+            doc.setFillColor(31, 95, 184);
+            doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text("DIGI MARKLAB - BRIEF PEMBUATAN WEBSITE", margin, 18);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, margin, 24);
+
+            y = 40;
+            doc.setTextColor(30, 41, 59);
+
+            function addSectionTitle(title) {
+                if (y > 270) { doc.addPage(); y = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(31, 95, 184);
+                doc.text(title, margin, y);
+                y += 6;
+                doc.setDrawColor(200, 210, 225);
+                doc.line(margin, y, 210 - margin, y);
+                y += 6;
+                doc.setTextColor(30, 41, 59);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(10);
+            }
+
+            function addField(label, val) {
+                if (!val) return;
+                if (y > 280) { doc.addPage(); y = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.text(`${label}:`, margin, y);
+                doc.setFont('helvetica', 'normal');
+                
+                const textLines = doc.splitTextToSize(String(val), pageWidth - 45);
+                doc.text(textLines, margin + 45, y);
+                y += (textLines.length * 5) + 3;
+            }
+
+            // 1. Data Klien
+            addSectionTitle("1. Data Klien");
+            addField("Nama Lengkap", data.client.nama);
+            addField("Nama Bisnis", data.client.namaBisnis);
+            addField("No WhatsApp", data.client.noWhatsapp);
+            addField("Email", data.client.email || '-');
+            y += 4;
+
+            // 2. Informasi Website
+            addSectionTitle("2. Informasi Website");
+            addField("Jenis Website", data.website.jenisWebsite);
+            addField("Tujuan Website", data.website.tujuanWebsite.join(', ') || '-');
+            addField("Target Selesai", data.website.targetSelesai || '-');
+            addField("Kisaran Budget", data.website.budget || '-');
+            addField("Domain", data.website.domainStatus);
+            addField("Hosting", data.website.hostingStatus);
+            y += 4;
+
+            // 3. Halaman
+            addSectionTitle("3. Halaman yang Dibutuhkan");
+            addField("Pilihan Halaman", data.halaman.pilihan.join(', ') || '-');
+            addField("Halaman Lainnya", data.halaman.lainnya || '-');
+            y += 4;
+
+            // 4. Fitur
+            addSectionTitle("4. Fitur yang Diinginkan");
+            addField("Pilihan Fitur", data.fitur.pilihan.join(', ') || '-');
+            addField("Fitur Lainnya", data.fitur.lainnya || '-');
+            y += 4;
+
+            // 5. Materi
+            addSectionTitle("5. Materi & Konten Website");
+            addField("Video URL", data.materi.videoUrl || '-');
+            addField("Tentang Perusahaan", data.materi.tentangPerusahaan || '-');
+            addField("Deskripsi Layanan", data.materi.deskripsiLayanan || '-');
+            addField("Testimoni", data.materi.testimoni || '-');
+            addField("Alamat", data.materi.alamat || '-');
+            addField("Sosial Media", data.materi.sosmed || '-');
+            y += 4;
+
+            // Render uploaded images in PDF preserving aspect ratio
+            if (uploadedData.logo.length > 0 || uploadedData.foto.length > 0) {
+                if (y > 240) { doc.addPage(); y = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.text("Lampiran Gambar (Logo & Foto):", margin, y);
+                y += 8;
+
+                const allImages = [...uploadedData.logo.map(l => ({ ...l, cat: 'Logo' })), ...uploadedData.foto.map(f => ({ ...f, cat: 'Foto' }))];
+                
+                for (const imgItem of allImages) {
+                    const dim = await getImageDimensions(imgItem.dataBase64);
+                    let imgWidth = 40;
+                    let imgHeight = (dim.height * imgWidth) / dim.width;
+                    if (imgHeight > 45) {
+                        imgHeight = 45;
+                        imgWidth = (dim.width * imgHeight) / dim.height;
+                    }
+
+                    if (y + imgHeight > 280) { doc.addPage(); y = 20; }
+
+                    doc.addImage(imgItem.dataBase64, 'JPEG', margin, y, imgWidth, imgHeight);
+                    doc.setFontSize(8);
+                    doc.text(`[${imgItem.cat}] ${imgItem.name}`, margin + imgWidth + 5, y + 10);
+                    doc.setFontSize(10);
+                    y += imgHeight + 8;
+                }
+            }
+
+            // 6. Referensi
+            addSectionTitle("6. Referensi Desain");
+            addField("Referensi 1", data.referensi.ref1 || '-');
+            addField("Referensi 2", data.referensi.ref2 || '-');
+            addField("Referensi 3", data.referensi.ref3 || '-');
+            addField("Bagian Disukai", data.referensi.catatan || '-');
+            y += 4;
+
+            // 7. Catatan
+            addSectionTitle("7. Catatan Tambahan");
+            addField("Catatan", data.catatanTambahan || '-');
+
+            const pdfBlob = doc.output('blob');
+            const file = new File([pdfBlob], filename, { type: 'application/pdf' });
+            downloadBlob(pdfBlob, filename);
+            return file;
+        }
+
+        // Generate Word using docx.js
+        async function generateWord(data, filename) {
+            const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, ImageRun, AlignmentType } = window.docx;
+
+            const children = [
+                new Paragraph({
+                    text: "DIGI MARKLAB - BRIEF PEMBUATAN WEBSITE",
+                    heading: HeadingLevel.HEADING_1,
+                    bold: true,
+                    color: "1F5FB8"
+                }),
+                new Paragraph({
+                    text: `Tanggal: ${new Date().toLocaleDateString('id-ID')}`,
+                    spacing: { after: 200 }
+                })
+            ];
+
+            function addDocSection(title, fields) {
+                children.push(new Paragraph({
+                    text: title,
+                    heading: HeadingLevel.HEADING_2,
+                    spacing: { before: 200, after: 100 },
+                    color: "1F5FB8"
+                }));
+
+                fields.forEach(([label, val]) => {
+                    if (!val) return;
+                    children.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: `${label}: `, bold: true }),
+                            new TextRun({ text: String(val) })
+                        ],
+                        spacing: { after: 80 }
+                    }));
+                });
+            }
+
+            addDocSection("1. Data Klien", [
+                ["Nama Lengkap", data.client.nama],
+                ["Nama Bisnis", data.client.namaBisnis],
+                ["No WhatsApp", data.client.noWhatsapp],
+                ["Email", data.client.email]
+            ]);
+
+            addDocSection("2. Informasi Website", [
+                ["Jenis Website", data.website.jenisWebsite],
+                ["Tujuan Website", data.website.tujuanWebsite.join(', ')],
+                ["Target Selesai", data.website.targetSelesai],
+                ["Kisaran Budget", data.website.budget],
+                ["Domain", data.website.domainStatus],
+                ["Hosting", data.website.hostingStatus]
+            ]);
+
+            addDocSection("3. Halaman yang Dibutuhkan", [
+                ["Pilihan Halaman", data.halaman.pilihan.join(', ')],
+                ["Halaman Lainnya", data.halaman.lainnya]
+            ]);
+
+            addDocSection("4. Fitur yang Diinginkan", [
+                ["Pilihan Fitur", data.fitur.pilihan.join(', ')],
+                ["Fitur Lainnya", data.fitur.lainnya]
+            ]);
+
+            addDocSection("5. Materi & Konten Website", [
+                ["Video URL", data.materi.videoUrl],
+                ["Tentang Perusahaan", data.materi.tentangPerusahaan],
+                ["Deskripsi Layanan", data.materi.deskripsiLayanan],
+                ["Testimoni", data.materi.testimoni],
+                ["Alamat", data.materi.alamat],
+                ["Sosial Media", data.materi.sosmed]
+            ]);
+
+            // Add images to docx if any
+            const allImages = [...uploadedData.logo.map(l => ({ ...l, cat: 'Logo' })), ...uploadedData.foto.map(f => ({ ...f, cat: 'Foto' }))];
+            if (allImages.length > 0) {
+                children.push(new Paragraph({
+                    text: "Lampiran Gambar (Logo & Foto):",
+                    heading: HeadingLevel.HEADING_3,
+                    spacing: { before: 150, after: 100 }
+                }));
+
+                for (const img of allImages) {
+                    try {
+                        const base64Data = img.dataBase64.split(',')[1];
+                        const binaryString = atob(base64Data);
+                        const len = binaryString.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        const dim = await getImageDimensions(img.dataBase64);
+                        let w = 200;
+                        let h = Math.round((dim.height * w) / dim.width);
+                        if (h > 250) { h = 250; w = Math.round((dim.width * h) / dim.height); }
+
+                        children.push(new Paragraph({
+                            children: [
+                                new ImageRun({
+                                    data: bytes.buffer,
+                                    transformation: { width: w, height: h }
+                                })
+                            ],
+                            spacing: { after: 50 }
+                        }));
+                        children.push(new Paragraph({
+                            text: `[${img.cat}] ${img.name}`,
+                            spacing: { after: 150 }
+                        }));
+                    } catch (e) {
+                        console.error("Error embedding image in docx:", e);
+                    }
+                }
+            }
+
+            addDocSection("6. Referensi Desain", [
+                ["Referensi 1", data.referensi.ref1],
+                ["Referensi 2", data.referensi.ref2],
+                ["Referensi 3", data.referensi.ref3],
+                ["Bagian Disukai", data.referensi.catatan]
+            ]);
+
+            addDocSection("7. Catatan Tambahan", [
+                ["Catatan", data.catatanTambahan]
+            ]);
+
+            const doc = new Document({
+                sections: [{ properties: {}, children }]
+            });
+
+            const blob = await Packer.toBlob(doc);
+            const file = new File([blob], filename, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            downloadBlob(blob, filename);
+            return file;
+        }
+
+        // Delivery handling (Web Share API for mobile, fallback/desktop redirect to WA)
+        function handleDelivery(file, data) {
+            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+            const waMessage = `Halo Admin DIGI MARKLAB, ini brief website dari *${data.client.nama}* (${data.client.namaBisnis}), mohon dicek 🙏 (mohon lampirkan file PDF/Word dan JSON yang baru saja terdownload).`;
+            const waUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
+
+            if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({
+                    title: 'Brief Website - ' + data.client.namaBisnis,
+                    text: waMessage,
+                    files: [file]
+                }).then(() => {
+                    // Also open WhatsApp link if needed or let share sheet handle it
+                }).catch(err => {
+                    console.log('Share canceled or failed:', err);
+                    // Fallback open WA
+                    window.open(waUrl, '_blank');
+                });
+            } else {
+                // Desktop or Web Share files not supported: files already downloaded, now open WhatsApp
+                setTimeout(() => {
+                    window.open(waUrl, '_blank');
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
